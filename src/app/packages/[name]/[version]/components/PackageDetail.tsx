@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
 import PackageDownloadsChart from './PackageDownloadsChart';
 import Link from 'next/link';
+import { Car } from 'lucide-react';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 
 interface PackageDetailProps {
   data: PackageData;
@@ -65,6 +67,27 @@ export function PackageDetail({ data }: PackageDetailProps) {
               {activeTab === 'Readme' && (
                 <ReactMarkdown>{data.readme}</ReactMarkdown>
               )}
+              {activeTab === 'Versions' && (
+                <>
+                  {data.versions.map((item :any) => (
+                      <Card className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
+                        <div>
+                          {item.version}
+                          {item.sizeKb}
+                        </div>
+                        <div>
+                          <div className='flex items-center gap-2 text-blue-900'>
+                            <ArrowDownOnSquareIcon className='size-5'/>
+                            <div className='text-lg font-semibold whitespace-nowrap'>Downloads</div>
+                          </div>
+                          <div className='text-right mt-2'>
+                            All time <span className='font-bold'>30</span>
+                          </div>
+                        </div>
+                      </Card>
+                  ))}
+                </>
+              )}
             </div>
           </div>
           <div className="w-80 flex-shrink-0">
@@ -92,7 +115,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Run the following command in your project dir</p>
                   <code className="block bg-gray-100 p-2 rounded text-sm">
-                    noir-libs add {data.name}@{'<version>'}
+                    noir-libs add {data.name}@{data.versions[0]}
                   </code>
                 </div>
               </div>
@@ -122,7 +145,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 Keywords
               </h3>
               <div className="flex flex-wrap gap-2">
-                {data.tag_name}
+                {data.tags}
               </div>
             </Card>
           </div>

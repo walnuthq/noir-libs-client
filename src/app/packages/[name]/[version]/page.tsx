@@ -1,21 +1,21 @@
 "use client"
-import { Suspense, useEffect, useState } from 'react';
-import { getPackageData } from '@/lib/api';
+import { useEffect, useState } from 'react';
 import { PackageDetail } from './components/PackageDetail';
-import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {
     name: string;
+    version: string;
   }
 }
 
 export default function Page({ params }: PageProps) {
   const [packageDetail, setPackageDetail] = useState()
+  
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await fetch(`/api/v1/packages/${params.name}`);
+        const response = await fetch(`/api/v1/packages/${params.name}/${params.version}`);
         if (response.status === 200) {
           const data = await response.json();
           setPackageDetail(data);
@@ -26,9 +26,7 @@ export default function Page({ params }: PageProps) {
     };
     
     fetchPackages();
-  }, []);
+  }, [params.name, params.version]);
 
-  return(packageDetail? (<PackageDetail data={packageDetail}/>) : (<></>)
-    
-  )
+  return (packageDetail ? <PackageDetail data={packageDetail}/> : <></>)
 }

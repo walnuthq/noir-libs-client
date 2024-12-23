@@ -8,10 +8,3 @@ export async function getPackageData(name: string): Promise<PackageData> {
   return response.json();
 }
 
-export async function getAllPackages(name: string) {
-  const response = await fetch(`/localhost:3001/api/v1/upload`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch package data');
-  }
-  return response.json();
-}

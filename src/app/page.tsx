@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
-
+import Header from '@/components/Header';
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
+import {ArchiveBoxIcon} from '@heroicons/react/20/solid';
+import Link from 'next/link';
 interface Package {
   name: string;
-  versions: string[];
+  version: string;
   size: string;
 }
 
@@ -15,17 +18,17 @@ export default function Home() {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await fetch(`/api/v1`);
+        const response = await fetch(`/api/v1/upload`);
         if (response.status === 200) {
           const data = await response.json();
-          setPackages(mapToPackages(data));
+          setPackages(data);
         }
       } catch (err) {
         console.log('no packages ', err);
       }
       setLoading(false);
     };
-
+    
     fetchPackages();
   }, []);
 
@@ -35,17 +38,17 @@ export default function Home() {
     elements.forEach(({ name, version, size }) => {
       if (packageMap.has(name)) {
         // If the package already exists, push the version to the array
-        packageMap.get(name)!.versions.push(version);
+        // packageMap.get(name)!.versions.push(version);
       } else {
         // If it doesn't exist, create a new entry
         packageMap.set(name, {
           name,
-          versions: [version], // Start with the current version in an array
+          version, // Start with the current version in an array
           size, // You might want to decide how to handle size if there are multiple versions
         });
       }
     });
-
+    console.log(elements);
     // Convert the map values to an array
     return Array.from(packageMap.values());
   }
@@ -56,32 +59,42 @@ export default function Home() {
   }
 
   return (
-      <div style={{ padding: '20px', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <header className="mb-6">
-          <h1 className="text-4xl font-bold text-center">npkg</h1>
-          <h1 className="text-2xl font-bold text-center">
-            <a href="https://noir-lang.org/" target="_blank" className="text-blue-950">Noir</a> packages registry for{' '}
-            <a href="https://aztec.network/learn" target="_blank" className="text-purple-800">Aztec Network</a>
-          </h1>
-        </header>
-        <main className="overflow-y-auto flex-grow">
-          <div className="w-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center">
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header/>
+        <main className="overflow-y-auto flex-grow md:px-64 px-4 bg-gray-100 pt-6">
+          <div className='flex-col flex md:flex-row justify-center items-center gap-12 md:gap-24 text-blue-900'>
+            <div className='flex items-center gap-2'>
+              <ArchiveBoxIcon className='size-6'/>
+              
+              <div className='text-xl font-semibold whitespace-nowrap'>Total packages: {packages.length}</div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <ArrowDownOnSquareIcon className='size-6'/>
+              <div className='text-xl font-semibold whitespace-nowrap'>Total downloads:</div>
+            </div>
+          </div>
+          <div className='text-center text-xl font-semibold whitespace-nowrap my-12 text-blue-900'>All packages</div>
+          <div className="w-full flex flex-col justify-center items-center">
             {packages.map((pkg) => (
-                <Card key={pkg.name} style={{ width: '300px', margin: '20px', padding: '20px' }}>
-                  <div className="text-2xl text-center">{pkg.name}</div>
-                  {pkg.versions.length === 1 ? ( // Check if there is only one version
-                      <div>{pkg.versions[0]}</div> // Render the single version
-                  ) : (
-                      <div>
-                        <div className="font-bold">Versions:</div>
-                        <ul className="list-disc pl-5"> {/* Optional styling for the version list */}
-                          {pkg.versions.map((ver, index) => (
-                              <li key={index}>{ver}</li> // Render each version as a list item
-                          ))}
-                        </ul>
-                      </div>
-                  )}
-                  <div><span className="font-bold">Size:</span> {pkg.size}</div>
+                <Card key={pkg.name} className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
+                  <div>
+                    <Link href={`/packages/${pkg.name}`} className="text-xl font-bold hover:underline">{pkg.name}: <span className='font-thin text-gray-600'>{pkg.version}</span></Link>
+                    <div className='mt-2'><span className="font-bold">Size:</span> {pkg.size}</div>
+                    <div className='flex mt-2 gap-2'>
+                      <div className='py-1 px-2 bg-slate-100 rounded-lg'>tag</div>
+                      <div className='py-1 px-2 bg-slate-100 rounded-lg'>tag</div>
+                      <div className='py-1 px-2 bg-slate-100 rounded-lg'>tag</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className='flex items-center gap-2 text-blue-900'>
+                      <ArrowDownOnSquareIcon className='size-5'/>
+                      <div className='text-lg font-semibold whitespace-nowrap'>Downloads</div>
+                    </div>
+                    <div className='text-right mt-2'>
+                      All time <span className='font-bold'>30</span>
+                    </div>
+                  </div>
                 </Card>
 
             ))}

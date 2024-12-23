@@ -4,7 +4,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/v1/:path*',
-                destination: 'https://npkg.walnut.dev/api/v1/:path*', // Proxy to Backend
+                destination: 'http://localhost:3001/api/v1/:path*', // Proxy to Backend
             },
         ];
     },

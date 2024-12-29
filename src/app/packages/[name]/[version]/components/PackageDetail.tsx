@@ -54,9 +54,9 @@ export function PackageDetail({ data }: PackageDetailProps) {
 
   return (
     <>
-      <div className="mb-6 bg-blue-900 pt-6 pb-16 text-white">
+      <div className="mb-6 bg-blue-900 pt-6 pb-8 text-white">
         <div className='flex justify-between  mx-auto px-4 max-w-[1200px] text-center items-center font-bold'>
-          <div>Noir Libs</div>
+          <div className='text-4xl'>Noir Libs</div>
           <Link href={'https://t.me/walnuthq'} className='flex gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
             <span className="[&>svg]:h-6 [&>svg]:w-6">
               <svg
@@ -75,6 +75,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
         <div className="mb-6">
           <div className="flex items-baseline gap-2">
             <h1 className="text-2xl font-semibold">{data.name}</h1>
+            <span className='text-gray-600'>{data.version}</span>
           </div>
         </div>
         <div className="border-b mb-6">
@@ -84,7 +85,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 key={tab}
                 className={`pb-2 px-1 -mb-[2px] ${
                   activeTab === tab
-                    ? 'border-b-2 border-blue-600 text-blue-600'
+                    ? 'border-b-2 border-blue-900 text-blue-900'
                     : 'text-gray-600'
                 }`}
                 onClick={() => setActiveTab(tab)}

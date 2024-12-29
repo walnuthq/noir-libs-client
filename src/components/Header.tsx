@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <header className=" bg-blue-900 pt-6 pb-16 md:px-64 px-4 text-white">
       <div className='flex justify-between text-center items-center font-bold'>
-        <div>Noir Libs</div>
+        <div className='text-4xl'>Noir Libs</div>
         <Link href={'https://t.me/walnuthq'} className='flex gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
         <span className="[&>svg]:h-6 [&>svg]:w-6">
           <svg

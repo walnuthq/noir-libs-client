@@ -1,8 +1,9 @@
 export interface PackageData {
   name: string;
-  versions: any;
-  size: string;
+  version: string;
+  size_kb: number;
   tags: string;
   readme: string;
-  dowloads: any;
+  created_at: string;
+  description: string;
 }

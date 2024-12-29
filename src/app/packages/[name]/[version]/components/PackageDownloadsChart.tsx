@@ -1,3 +1,4 @@
+import { DownloadsData } from '@/types/downloads';
 import React, { useState, useEffect } from 'react';
 import {
   ResponsiveContainer,
@@ -9,54 +10,34 @@ import {
   Tooltip
 } from 'recharts';
 
-interface Download {
-  id: number;
-  downloadDate: string;
-}
-
-interface DownloadsResponse {
-  package: string;
-  version: string;
-  totalDownloads: number;
-  downloads: Download[];
-}
-
 interface ChartDataPoint {
   date: string;
   downloads: number;
 }
 
-const PackageDownloadsChart = ({ data }) => {
-  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-  useEffect(() => {
-    const fetchDownloads = async () => {
-      try {
-        //the get request address is presented in a test format, the version for the request will be transmitted separately
-        const response = await fetch(`/api/v1/packages/${data.name}/${data.versions[3].major}.${data.versions[3].minor}.${data.versions[3].patch}/downloads`);
-        if (!response.ok) throw new Error('Failed to fetch downloads');
-        
-        const responseData: DownloadsResponse = await response.json();
-        
-        const downloadsByDate = responseData.downloads.reduce<Record<string, number>>((acc, download) => {
-          const date = new Date(download.downloadDate).toISOString().split('T')[0];
-          acc[date] = (acc[date] || 0) + 1;
-          return acc;
-        }, {});
+interface PackageDownloadsChartProps {
+  data: DownloadsData | undefined;
+}
 
-        const formattedData = Object.entries(downloadsByDate).map(([date, downloads]) => ({
+const PackageDownloadsChart = ({ data }: PackageDownloadsChartProps) => {
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+
+  useEffect(() => {
+    if (data?.downloads) {
+      const downloadsByDate = data.downloads.reduce<Record<string, number>>((acc, download) => {
+        const date = new Date(download.downloadDate).toISOString().split('T')[0];
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+      }, {});
+
+      const formattedData = Object.entries(downloadsByDate)
+        .map(([date, downloads]) => ({
           date,
           downloads
-        }));
+        }))
+        .sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
 
-        formattedData.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
-        setChartData(formattedData);
-      } catch (error) {
-        console.error('Error fetching downloads:', error);
-      }
-    };
-    
-    if (data?.name && data?.versions?.[0]) {
-      fetchDownloads();
+      setChartData(formattedData);
     }
   }, [data]);
 

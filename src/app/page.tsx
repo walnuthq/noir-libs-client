@@ -5,13 +5,14 @@ import Header from '@/components/Header';
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import {ArchiveBoxIcon} from '@heroicons/react/20/solid';
 import Link from 'next/link';
+import PackageDownloadsCount from '@/components/PackageDownloadsCount';
 interface Package {
   name: string;
   versions: any;
-  size: string;
   tags: string;
   readme: string;
   dowloads: any;
+  description: string;
 }
 
 export default function Home() {
@@ -35,26 +36,6 @@ export default function Home() {
     fetchPackages();
   }, []);
 
-  // function mapToPackages(elements: any[]): Package[] {
-  //   const packageMap = new Map<string, Package>();
-
-  //   elements.forEach(({ name, version, size }) => {
-  //     if (packageMap.has(name)) {
-  //       // If the package already exists, push the version to the array
-  //       // packageMap.get(name)!.versions.push(version);
-  //     } else {
-  //       // If it doesn't exist, create a new entry
-  //       packageMap.set(name, {
-  //         name,
-  //         version, // Start with the current version in an array
-  //         size, // You might want to decide how to handle size if there are multiple versions
-  //       });
-  //     }
-  //   });
-  //   console.log(elements);
-  //   // Convert the map values to an array
-  //   return Array.from(packageMap.values());
-  // }
 
 
   if (loading) {
@@ -62,9 +43,9 @@ export default function Home() {
   }
 
   return (
-      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         <Header/>
-        <main className="overflow-y-auto flex-grow md:px-64 px-4 bg-gray-100 pt-6">
+        <main className="flex-grow md:px-64 px-4 bg-gray-100 pt-6">
           <div className='flex-col flex md:flex-row justify-center items-center gap-12 md:gap-24 text-blue-900'>
             <div className='flex items-center gap-2'>
               <ArchiveBoxIcon className='size-6'/>
@@ -81,8 +62,8 @@ export default function Home() {
             {packages.map((pkg) => (
                 <Card key={pkg.name} className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
                   <div>
-                    <Link href={`/packages/${pkg.name}/${pkg.versions[length]}`} className="text-xl font-bold hover:underline">{pkg.name}: <span className='font-thin text-gray-600'>{pkg.versions[length]}</span></Link>
-                    <div className='mt-2'><span className="font-bold">Size:</span> {pkg.size}</div>
+                    <Link href={`/packages/${pkg.name}/${pkg.versions[0].version}`} className="text-xl font-bold hover:underline">{pkg.name}: <span className='font-thin text-gray-600'>{pkg.versions[length].version}</span></Link>
+                    <div className='mt-2'><span className="font-bold">Size:</span> {pkg.versions[length].sizeKb}</div>
                     <div className='flex mt-2 gap-2'>
                       <div className='py-1 px-2 bg-slate-100 rounded-lg'>{pkg.tags}</div>
                     </div>
@@ -93,7 +74,7 @@ export default function Home() {
                       <div className='text-lg font-semibold whitespace-nowrap'>Downloads</div>
                     </div>
                     <div className='text-right mt-2'>
-                      All time <span className='font-bold'>{pkg.dowloads.length}</span>
+                      All time <span className='font-bold'><PackageDownloadsCount pkg_name={pkg.name} pkg_version={pkg.versions[0].version}/></span>
                     </div>
                   </div>
                 </Card>

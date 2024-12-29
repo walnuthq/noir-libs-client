@@ -9,6 +9,12 @@ import PackageDownloadsChart from './PackageDownloadsChart';
 import Link from 'next/link';
 import { Car } from 'lucide-react';
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
+import { formatDistanceToNow } from 'date-fns';
+import { fetchPackageDownloadsCount } from '@/app/api/getDownloadsCount';
+import PackageDownloadsCount from '@/components/PackageDownloadsCount';
+import {ArchiveBoxIcon} from '@heroicons/react/20/solid';
+import { DownloadsData } from '@/types/downloads';
+
 
 interface PackageDetailProps {
   data: PackageData;
@@ -16,8 +22,35 @@ interface PackageDetailProps {
 
 export function PackageDetail({ data }: PackageDetailProps) {
   const [activeTab, setActiveTab] = useState('Readme');
+  const [monthlyDownloads, setMonthlyDownloads] = useState<DownloadsData>();
+  const [versionsArray, setVersionsArray] = useState([]);
   const tabs = ['Readme', 'Versions', 'Dependencies', 'Dependents'];
+  useEffect(() => {
+    const getDownloadsCount = async () => {
 
+      try {
+        const resp = await fetchPackageDownloadsCount(data.name, data.version);
+        console.log(resp);
+        setMonthlyDownloads(resp);
+      } catch (err) {
+        console.error('Failed to fetch downloads:', err);
+      }
+    };
+    const getVersionsArray = async () => {
+      try {
+        const response = await fetch(`/api/v1/packages`);
+        if (response.status === 200) {
+          const packageData = await response.json();
+          console.log(packageData.filter((item: any) => item.name === data.name)[0].versions);
+          setVersionsArray(packageData.filter((item: any) => item.name === data.name)[0].versions);
+        }
+      } catch (err) {
+        console.log('no packages ', err);
+      }
+    }
+    getVersionsArray();
+    getDownloadsCount();
+  }, [])
 
   return (
     <>
@@ -69,11 +102,17 @@ export function PackageDetail({ data }: PackageDetailProps) {
               )}
               {activeTab === 'Versions' && (
                 <>
-                  {data.versions.map((item :any) => (
+                  {versionsArray.map((item :any) => (
                       <Card className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
-                        <div>
-                          {item.version}
-                          {item.sizeKb}
+                        <div className='flex items-center gap-4'>
+                          <Link href={`/packages/${data.name}/${item.version}`} className=' bg-gray-300 p-2 hover:scale-110 transition-all delay-75 rounded-full'>
+                            <ArchiveBoxIcon className='size-7'/>
+                          </Link>
+                          <div>
+                            <div className="text-gray-600 text-xs">{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</div>
+                            <Link href={`/packages/${data.name}/${item.version}`} className='text-lg font-semibold whitespace-nowrap hover:underline'>{item.version}</Link>
+                            <div className="text-gray-600 text-xs">Size: <span className='text-base text-black'>{item.sizeKb} KB</span></div>
+                          </div>
                         </div>
                         <div>
                           <div className='flex items-center gap-2 text-blue-900'>
@@ -81,7 +120,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                             <div className='text-lg font-semibold whitespace-nowrap'>Downloads</div>
                           </div>
                           <div className='text-right mt-2'>
-                            All time <span className='font-bold'>30</span>
+                            All time <span className='font-bold'><PackageDownloadsCount pkg_name={data.name} pkg_version={data.version}/></span>
                           </div>
                         </div>
                       </Card>
@@ -97,13 +136,17 @@ export function PackageDetail({ data }: PackageDetailProps) {
               </h3>
               <div className="space-y-2">
                 <div>
-                  <span className="text-gray-600">Version</span>
+                  <span className="text-gray-600">Version</span>{' '}
+                  <span>{data.version}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Uploaded</span>
+                  <span className="text-gray-600">Uploaded</span>{' '}
+                  <span>{formatDistanceToNow(new Date(data.created_at), { addSuffix: true })}</span>
                 </div>
                 <div>
                   <span className="text-gray-600">Size</span>
+                  {' '}
+                  <span>{data.size_kb} kb</span>
                 </div>
               </div>
             </Card>
@@ -115,7 +158,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Run the following command in your project dir</p>
                   <code className="block bg-gray-100 p-2 rounded text-sm">
-                    noir-libs add {data.name}@{data.versions[0]}
+                    noir-libs add {data.name}@{data.version}
                   </code>
                 </div>
               </div>
@@ -124,7 +167,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 Monthly downloads
               </h3>
-              <PackageDownloadsChart data={data} />
+              <PackageDownloadsChart data={monthlyDownloads} />
             </Card>
 
             <Card className="p-4 mb-4">

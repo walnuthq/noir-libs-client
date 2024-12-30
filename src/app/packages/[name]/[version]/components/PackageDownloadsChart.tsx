@@ -41,6 +41,14 @@ const PackageDownloadsChart = ({ data }: PackageDownloadsChartProps) => {
     }
   }, [data]);
 
+  if (!data?.downloads || chartData.length === 0) {
+    return (
+      <div className="h-48 w-full flex items-center justify-center border border-gray-200 rounded-lg bg-gray-50">
+        <p className="text-gray-500 text-lg">No data available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-48">
       <ResponsiveContainer width="100%" height="100%">

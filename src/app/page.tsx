@@ -17,6 +17,7 @@ interface Package {
 
 export default function Home() {
   const [packages, setPackages] = useState<Package[]>([]);
+  const [allDownloads, setAllDownloads] = useState();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -32,8 +33,21 @@ export default function Home() {
       }
       setLoading(false);
     };
+    const fetchAllDownloads = async () => {
+      try {
+        const response = await fetch(`/api/v1/packages/downloads`);
+        if (response.status === 200) {
+          const data = await response.json();
+          setAllDownloads(data.total);
+        }
+      } catch (err) {
+        console.log('no packages ', err);
+      }
+      setLoading(false);
+    };
     
     fetchPackages();
+    fetchAllDownloads();
   }, []);
 
 
@@ -54,16 +68,17 @@ export default function Home() {
             </div>
             <div className='flex items-center gap-2'>
               <ArrowDownOnSquareIcon className='size-6'/>
-              <div className='text-xl font-semibold whitespace-nowrap'>Total downloads:</div>
+              <div className='text-xl font-semibold whitespace-nowrap'>Total downloads: {allDownloads}</div>
             </div>
           </div>
           <div className='text-center text-xl font-semibold whitespace-nowrap my-12 text-blue-900'>All packages</div>
           <div className="w-full flex flex-col justify-center items-center">
             {packages.map((pkg) => (
-                <Card key={pkg.name} className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
+              <Link href={`/packages/${pkg.name}/${pkg.versions[0].version}`} key={pkg.name} className='lg:w-2/4 '>
+                <Card  className='flex justify-between hover:shadow-xl transition-all delay-0 cursor-pointer' style={{  margin: '10px', padding: '20px' }}>
                   <div>
-                    <Link href={`/packages/${pkg.name}/${pkg.versions[0].version}`} className="text-xl font-bold hover:underline">{pkg.name}: <span className='font-thin text-gray-600'>{pkg.versions[length].version}</span></Link>
-                    <div className='mt-2'><span className="font-bold">Size:</span> {pkg.versions[length].sizeKb}</div>
+                    <div className="text-xl font-bold">{pkg.name} <span className='font-thin text-gray-600'>{pkg.versions[length].version}</span></div>
+                    {/* <div className='mt-2'><span className="font-bold">Size:</span> {pkg.versions[length].sizeKb}</div> */}
                     <div className='flex mt-2 gap-2'>
                       <div className='py-1 px-2 bg-slate-100 rounded-lg'>{pkg.tags}</div>
                     </div>
@@ -78,6 +93,8 @@ export default function Home() {
                     </div>
                   </div>
                 </Card>
+              </Link>
+
 
             ))}
           </div>

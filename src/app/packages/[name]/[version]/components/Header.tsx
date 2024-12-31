@@ -4,9 +4,9 @@ import React from 'react';
 const Header = () => {
   return (
     <div className="mb-6 bg-blue-900 pt-6 pb-8 text-white">
-      <div className='flex justify-between  mx-auto px-4 max-w-[1200px] text-center items-center font-bold'>
+      <div className='flex justify-between  mx-auto px-4 max-w-5xl text-center items-center font-bold'>
         <Link href={'/'} className='text-4xl'>Noir Libs</Link>
-        <Link href={'https://t.me/walnuthq'} className='flex gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
+        <Link href={'https://t.me/walnuthq'} className='md:flex hidden gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
           <span className="[&>svg]:h-6 [&>svg]:w-6">
             <svg
               xmlns="http://www.w3.org/2000/svg"

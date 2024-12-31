@@ -63,11 +63,11 @@ export function PackageDetail({ data }: PackageDetailProps) {
 
   return (
     <>
-      <div className="max-w-[1200px] mx-auto p-4">
+      <div className="max-w-5xl mx-auto p-4">
         <div className="mb-6">
           <div className="flex items-baseline gap-2">
             <h1 className="text-2xl font-semibold">{data.name}</h1>
-            <span className='text-gray-600 text-2xl'>{data.version}</span>
+            <span className='text-gray-600 text-xl'>{data.version}</span>
           </div>
         </div>
         <div className="border-b mb-6">
@@ -87,7 +87,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
             ))}
           </div>
         </div>
-        <div className="flex gap-6">
+        <div className="md:flex gap-6">
           <div className="flex-grow">
             <div className="prose max-w-none">
               {activeTab === 'Readme' && (
@@ -99,14 +99,15 @@ export function PackageDetail({ data }: PackageDetailProps) {
               {activeTab === 'Versions' && (
                 <>
                   {versionsArray.map((item :any) => (
-                      <Card className='w-full flex justify-between' style={{  margin: '10px', padding: '20px' }}>
+                    <Link href={`/packages/${data.name}/${data.version}`} key={data.name} className='w-full no-underline'>
+                      <Card className='w-full flex justify-between  hover:shadow-xl transition-all my-3 delay-0 cursor-pointer' style={{  padding: '20px' }}>
                         <div className='flex items-center gap-4'>
-                          <Link href={`/packages/${data.name}/${item.version}`} className=' bg-gray-300 p-2 hover:scale-110 transition-all delay-75 rounded-full'>
+                          <div className=' bg-gray-300 p-2 rounded-full'>
                             <ArchiveBoxIcon className='size-7'/>
-                          </Link>
+                          </div>
                           <div>
                             <div className="text-gray-600 text-xs">{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</div>
-                            <Link href={`/packages/${data.name}/${item.version}`} className='text-lg font-semibold whitespace-nowrap hover:underline'>{item.version}</Link>
+                            <div className='text-lg font-semibold whitespace-nowrap'>{item.version}</div>
                             <div className="text-gray-600 text-xs">Size: <span className='text-base text-black'>{item.sizeKb} KB</span></div>
                           </div>
                         </div>
@@ -120,12 +121,13 @@ export function PackageDetail({ data }: PackageDetailProps) {
                           </div>
                         </div>
                       </Card>
+                    </Link>
                   ))}
                 </>
               )}
             </div>
           </div>
-          <div className="w-80 flex-shrink-0">
+          <div className="md:w-80 flex-shrink-0">
             <Card className="p-4 mb-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 Metadata

@@ -16,7 +16,8 @@ export const runtime = "edge";
 
 export default function Page({ params }: PageProps) {
   const [packageDetail, setPackageDetail] = useState()
-  
+  const [packageFetched, setPackageFetched] = useState(false);
+
   useEffect(() => {
     const fetchPackages = async () => {
       try {
@@ -27,6 +28,8 @@ export default function Page({ params }: PageProps) {
         }
       } catch (err) {
         console.log('no packages ', err);
+      } finally {
+        setPackageFetched(true);
       }
     };
     
@@ -36,7 +39,7 @@ export default function Page({ params }: PageProps) {
   return (
     <>
       <Header/>
-      {packageDetail ? <PackageDetail data={packageDetail}/> : 
+      {packageFetched && (packageDetail ? <PackageDetail data={packageDetail}/> :
           <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
             <FileQuestion className="w-16 h-16 text-gray-400 mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Package Not Found</h1>
@@ -51,7 +54,7 @@ export default function Page({ params }: PageProps) {
                 Return Home
               </a>
             </div>
-          </div>
+          </div>)
       }
     </>
     

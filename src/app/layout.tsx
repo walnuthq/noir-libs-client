@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "npkg package registry",
-  description: "Noir package registry for Aztec Network",
+  title: "Noir Libs",
+  description: "Noir packages registry for Aztec Network",
 };
 
 export default function RootLayout({

@@ -11,6 +11,9 @@ interface PageProps {
   }
 }
 
+export const runtime = "edge";
+
+
 export default function Page({ params }: PageProps) {
   const [packageDetail, setPackageDetail] = useState()
   

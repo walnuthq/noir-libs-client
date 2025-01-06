@@ -4,7 +4,7 @@ import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 const Header = () => {
-  const noirLibsInstallCommand = 'curl -s https://raw.githubusercontent.com/walnuthq/noir-libs/main/download_noir_libs_cli.sh | bash';
+  const noirLibsInstallCommand = 'curl -s https://raw.githubusercontent.com/walnuthq/noir-libs/main/install.sh | bash';
   const copyCommand = () => {
     navigator.clipboard.writeText(noirLibsInstallCommand);
     setCopied(true);

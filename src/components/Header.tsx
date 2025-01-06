@@ -1,7 +1,18 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
+import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
 const Header = () => {
+  const noirLibsInstallCommand = 'curl -s https://raw.githubusercontent.com/walnuthq/noir-libs/main/download_noir_libs_cli.sh | bash';
+  const copyCommand = () => {
+    navigator.clipboard.writeText(noirLibsInstallCommand);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  const [copied, setCopied] = useState(false);
+
+
   return (
     <header className=" bg-blue-900 pt-6 pb-6 md:pb-16 text-white">
       <div className='md:max-w-5xl px-4 mx-auto flex flex-col'>
@@ -20,15 +31,34 @@ const Header = () => {
             Join us on Telegram!
           </Link>
         </div>
-        <h1 className="text-4xl font-bold text-center mt-32">
+        <h1 className="text-4xl font-bold text-center mt-20 md:mt-32">
           <a href="https://noir-lang.org/" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Noir</a> packages registry for{' '}
           <a href="https://aztec.network/learn" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Aztec Network</a>
         </h1>
-        <div className='flex justify-center mt-24'>
-          <Button  className='font-bold bg-blue-500 bg-opacity-55 hover:bg-blue-600 text-center text-white'>{'curl -L <url-to-install-noir-libs-cmd>'}</Button>
+        <div className="flex justify-center mt-10 md:mt-24 px-4 sm:px-0 ">
+          <div className="md:max-w-5xl px-4 mx-auto flex flex-col">
+            <div>
+              <p className="text-lg sm:text-xl text-white mb-4 text-center">
+                Install noir-libs today! Run this command in your terminal
+              </p>
+              <div
+                  className="bg-gray-100 p-4 rounded text-sm flex flex-col sm:flex-row items-center sm:justify-between font-bold">
+                <code className="text-blue-800 break-all w-full sm:w-auto text-center sm:text-left">
+                  {noirLibsInstallCommand}
+                </code>
+                <button onClick={copyCommand} className="mt-4 sm:mt-0 sm:ml-4">
+                  {copied ? (
+                      <CheckIcon className="w-6 h-6 text-green-600"/>
+                  ) : (
+                      <ClipboardDocumentIcon className="w-6 h-6 text-gray-700"/>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
+
     </header>
   );
 };

@@ -18,7 +18,6 @@ interface Package {
 export default function Home() {
   const [packages, setPackages] = useState<Package[]>([]);
   const [allDownloads, setAllDownloads] = useState();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -31,7 +30,6 @@ export default function Home() {
       } catch (err) {
         console.log('no packages ', err);
       }
-      setLoading(false);
     };
     const fetchAllDownloads = async () => {
       try {
@@ -43,18 +41,11 @@ export default function Home() {
       } catch (err) {
         console.log('no packages ', err);
       }
-      setLoading(false);
     };
     
     fetchPackages();
     fetchAllDownloads();
   }, []);
-
-
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>

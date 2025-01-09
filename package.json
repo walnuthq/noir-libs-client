@@ -25,7 +25,8 @@
     "react-markdown": "^9.0.1",
     "recharts": "^2.15.0",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "wrangler": "^3.100.0"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.7",

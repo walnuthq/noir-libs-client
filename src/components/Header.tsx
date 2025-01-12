@@ -40,8 +40,7 @@ const Header = () => {
           </div>
         </div>
         <h1 className="text-4xl font-bold text-center mt-20 md:mt-32">
-          <a href="https://noir-lang.org/" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Noir</a> packages registry for{' '}
-          <a href="https://aztec.network/learn" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Aztec Network</a>
+          <a href="https://noir-lang.org/" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Noir</a> Package Registry 
         </h1>
         <div className="flex justify-center mt-10 md:mt-24 px-4 sm:px-0 ">
           <div className="md:max-w-5xl px-4 mx-auto flex flex-col">

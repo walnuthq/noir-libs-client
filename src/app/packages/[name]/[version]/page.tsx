@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { PackageDetail } from './components/PackageDetail';
 import Header from './components/Header';
 import { FileQuestion } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 interface PageProps {
   params: {
@@ -37,9 +38,9 @@ export default function Page({ params }: PageProps) {
   }, [params.name, params.version]);
 
   return (
-    <>
+    <div style={{ height: '100vh', overflowY: 'auto'}}>
       <Header/>
-      {packageFetched && (packageDetail ? <PackageDetail data={packageDetail}/> :
+      {packageFetched && (packageDetail ? <div className='mb-24'><PackageDetail data={packageDetail}/> </div>:
           <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
             <FileQuestion className="w-16 h-16 text-gray-400 mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Package Not Found</h1>
@@ -56,7 +57,8 @@ export default function Page({ params }: PageProps) {
             </div>
           </div>)
       }
-    </>
+      <Footer/>
+    </div>
     
   )
 }

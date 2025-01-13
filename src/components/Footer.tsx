@@ -15,7 +15,7 @@ function EditorFooter() {
   return (
     <div
       className={
-        'px-5 bg-gray-100 absolute bottom-0 w-full border border-gray-200 dark:border-darkMode-primary text-xs h-[42px] items-center text-gray-600 ml-auto flex justify-between'
+        'px-5 bg-gray-100 absolute bottom-0 w-full border border-gray-200 dark:border-darkMode-primary text-sm h-[42px] items-center text-gray-600 ml-auto flex justify-between'
         }
     >
       <div className="flex items-center justify-end divide-x divide-gray-200 dark:divide-black-500">
@@ -31,7 +31,7 @@ function EditorFooter() {
           </a>
         </span>
       </div>
-      <Link href={'https://github.com/walnuthq/noir-libs-client'} className='flex items-center gap-2 hover:text-blue-500'>
+      <Link href={'https://github.com/walnuthq/noir-libs'} className='flex items-center gap-2 hover:text-blue-500'>
         <span>GitHub</span>
         <GitHubIcon className='w-4 h-4'/>
       </Link>

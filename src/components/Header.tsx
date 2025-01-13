@@ -33,7 +33,7 @@ const Header = () => {
               Join us on Telegram
             </Link>
             <div>|</div>
-            <Link href={'https://github.com/walnuthq/noir-libs-client'} className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
+            <Link href={'https://github.com/walnuthq/noir-libs'} className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
               <span>GitHub</span>
               <GitHubIcon className='w-4 h-4'/>
             </Link>

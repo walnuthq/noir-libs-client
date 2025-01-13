@@ -6,6 +6,7 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import {ArchiveBoxIcon} from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import PackageDownloadsCount from '@/components/PackageDownloadsCount';
+import Footer from '@/components/Footer';
 interface Package {
   name: string;
   versions: any;
@@ -50,7 +51,7 @@ export default function Home() {
   return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         <Header/>
-        <main className="flex-grow  bg-gray-100 pt-6">
+        <main className="flex-grow  bg-gray-100 pt-6 relative">
           <div className='md:max-w-5xl px-4 mx-auto flex flex-col'>
             <div className='flex-col  flex md:flex-row justify-center items-center gap-4 md:gap-24 text-blue-900'>
               <div className='flex items-center gap-2'>
@@ -64,7 +65,7 @@ export default function Home() {
               </div>
             </div>
             <div className='text-center text-xl font-semibold whitespace-nowrap my-4 md:my-12 text-blue-900'>All packages</div>
-            <div className="w-full flex flex-col justify-center items-center">
+            <div className="w-full flex flex-col justify-center items-center mb-24">
               {packages.map((pkg) => (
                 <Link href={`/packages/${pkg.name}/${pkg.versions[0].version}`} key={pkg.name} className='w-full'>
                   <Card  className='flex justify-between gap-5 hover:shadow-xl transition-all delay-0 cursor-pointer' style={{  margin: '10px', padding: '20px' }}>
@@ -86,11 +87,10 @@ export default function Home() {
                     </div>
                   </Card>
                 </Link>
-
-
               ))}
             </div>
           </div>
+        <Footer/>
         </main>
       </div>
   );

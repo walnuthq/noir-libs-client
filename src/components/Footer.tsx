@@ -20,7 +20,7 @@ function EditorFooter() {
     >
       <div className="flex items-center justify-end divide-x divide-gray-200 dark:divide-black-500">
         <span className="pr-4">
-          Made with ❤️ by{' '}
+          Built with ❤️ by{' '}
           <a
             className="underline font-medium"
             href="https://walnut.dev"

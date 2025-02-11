@@ -22,7 +22,6 @@ const PackageDownloadsCount = ({
           }
         } else {
           const count = await fetchAllPackageDownloadsCount(pkg_name);
-          console.log('no mam', count);
           if (count) {
             setDownloadsCount(count);
           }

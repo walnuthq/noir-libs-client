@@ -1,4 +1,3 @@
-import { DownloadsData } from '@/types/downloads';
 import React, { useState, useEffect } from 'react';
 import {
   ResponsiveContainer,
@@ -9,6 +8,7 @@ import {
   YAxis,
   Tooltip
 } from 'recharts';
+import { DownloadsDto } from '@/types/DownloadsDto';
 
 interface ChartDataPoint {
   date: string;
@@ -16,16 +16,16 @@ interface ChartDataPoint {
 }
 
 interface PackageDownloadsChartProps {
-  data: DownloadsData | undefined;
+  data: DownloadsDto | undefined;
 }
 
 const PackageDownloadsChart = ({ data }: PackageDownloadsChartProps) => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
 
   useEffect(() => {
-    if (data?.downloads) {
-      const downloadsByDate = data.downloads.reduce<Record<string, number>>((acc, download) => {
-        const date = new Date(download.downloadDate).toISOString().split('T')[0];
+    if (data) {
+      const downloadsByDate = data.downloadDates.reduce<Record<string, number>>((acc, download) => {
+        const date = new Date(download).toISOString().split('T')[0];
         acc[date] = (acc[date] || 0) + 1;
         return acc;
       }, {});
@@ -41,7 +41,7 @@ const PackageDownloadsChart = ({ data }: PackageDownloadsChartProps) => {
     }
   }, [data]);
 
-  if (!data?.downloads || chartData.length === 0) {
+  if (!data || chartData.length === 0) {
     return (
       <div className="h-48 w-full flex items-center justify-center border border-gray-200 rounded-lg bg-gray-50">
         <p className="text-gray-500 text-lg">No data available</p>

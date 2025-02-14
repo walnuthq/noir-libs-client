@@ -1,24 +1,15 @@
 import Link from 'next/link';
-import { Button } from './ui/button';
-import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { GitHubIcon } from './Footer';
+import React from 'react';
+import { UserProfile } from '@/components/UserProfile';
 
 const Header = () => {
-  const noirLibsInstallCommand = 'curl -s https://raw.githubusercontent.com/walnuthq/noir-libs/main/install.sh | bash';
-  const copyCommand = () => {
-    navigator.clipboard.writeText(noirLibsInstallCommand);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  const [copied, setCopied] = useState(false);
-
 
   return (
-    <header className=" bg-blue-900 pt-6 pb-6 md:pb-16 text-white">
-      <div className='md:max-w-5xl px-4 mx-auto flex flex-col'>
-        <div className='flex justify-between text-center items-center font-bold'>
-          <div className='text-2xl'>Noir Libs</div>
+    <header className=" bg-blue-900 pt-6 pb-6  text-white">
+        <div className='flex justify-between  mx-auto px-4 max-w-5xl text-center items-center font-bold'>
+          <Link href="/" >
+            <div className='text-2xl'>Noir Libs</div>
+          </Link>
           <div className='flex items-center gap-4'>
             <Link href={'https://t.me/walnuthq'} className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
             <span className="[&>svg]:h-4 [&>svg]:w-4">
@@ -32,40 +23,9 @@ const Header = () => {
             </span>
               Join us on Telegram
             </Link>
-            <div>|</div>
-            <Link href={'https://github.com/walnuthq/noir-libs'} className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
-              <span>GitHub</span>
-              <GitHubIcon className='w-4 h-4'/>
-            </Link>
-          </div>
+            <UserProfile/>
+         </div>
         </div>
-        <h1 className="text-4xl font-bold text-center mt-20 md:mt-32">
-          <a href="https://noir-lang.org/" target="_blank" className="text-blue-400 hover:text-blue-300 transition-all delay-75 cursor-pointer">Noir</a> Package Registry 
-        </h1>
-        <div className="flex justify-center mt-10 md:mt-24 px-4 sm:px-0 ">
-          <div className="md:max-w-5xl px-4 mx-auto flex flex-col">
-            <div>
-              <p className="text-lg sm:text-xl text-white mb-4 text-center">
-              Install noir-libs by running the following command in your terminal
-              </p>
-              <div
-                  className="bg-gray-100 p-4 rounded text-sm flex flex-col sm:flex-row items-center sm:justify-between font-bold">
-                <code className="text-blue-800 break-all w-full sm:w-auto text-center sm:text-left">
-                  {noirLibsInstallCommand}
-                </code>
-                <button onClick={copyCommand} className="mt-4 sm:mt-0 sm:ml-4">
-                  {copied ? (
-                      <CheckIcon className="w-6 h-6 text-green-600"/>
-                  ) : (
-                      <ClipboardDocumentIcon className="w-6 h-6 text-gray-700"/>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </header>
   );
 };

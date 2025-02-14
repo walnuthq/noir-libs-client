@@ -8,6 +8,7 @@ import Link from 'next/link';
 import PackageDownloadsCount from '@/components/PackageDownloadsCount';
 import Footer from '@/components/Footer';
 import { PackageDto } from '@/types/PackageDto';
+import HomePageBanner from '@/components/HomePageBanner';
 
 export default function Home() {
   const [packages, setPackages] = useState<PackageDto[]>([]);
@@ -17,7 +18,7 @@ export default function Home() {
     const fetchPackages = async () => {
       try {
         const response = await fetch(`/api/v1/packages`);
-        if (response.status === 200) {
+        if (response.ok) {
           const data: PackageDto[] = await response.json();
           setPackages(data);
         }
@@ -44,6 +45,7 @@ export default function Home() {
   return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
         <Header/>
+        <HomePageBanner/>
         <main className="flex-grow  bg-gray-100 pt-6 relative">
           <div className='md:max-w-5xl px-4 mx-auto flex flex-col'>
             <div className='flex-col  flex md:flex-row justify-center items-center gap-4 md:gap-24 text-blue-900'>

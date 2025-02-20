@@ -30,7 +30,7 @@ export default function Page({ params }: PageProps) {
           setPackageDetail(data);
         }
       } catch (err) {
-        console.log('no packages ', err);
+        console.log(err);
       } finally {
         setPackageFetched(true);
       }

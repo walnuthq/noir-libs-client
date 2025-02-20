@@ -9,10 +9,11 @@ import PackageDownloadsCount from '@/components/PackageDownloadsCount';
 import Footer from '@/components/Footer';
 import { PackageDto } from '@/types/PackageDto';
 import HomePageBanner from '@/components/HomePageBanner';
+import { fetchAllPackagesDownloadsCount } from '@/app/api/getDownloadsCount';
 
 export default function Home() {
   const [packages, setPackages] = useState<PackageDto[]>([]);
-  const [allDownloads, setAllDownloads] = useState();
+  const [allDownloads, setAllDownloads] = useState<number>(0);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -23,21 +24,16 @@ export default function Home() {
           setPackages(data);
         }
       } catch (err) {
-        console.log('no packages ', err);
+        console.log(err);
       }
     };
     const fetchAllDownloads = async () => {
-      try {
-        const response = await fetch(`/api/v1/packages/downloads`);
-        if (response.status === 200) {
-          const data = await response.json();
-          setAllDownloads(data.total);
-        }
-      } catch (err) {
-        console.log('no packages ', err);
+      const count = await fetchAllPackagesDownloadsCount();
+      if (count) {
+        setAllDownloads(count);
       }
     };
-    
+
     fetchPackages();
     fetchAllDownloads();
   }, []);
@@ -51,7 +47,6 @@ export default function Home() {
             <div className='flex-col  flex md:flex-row justify-center items-center gap-4 md:gap-24 text-blue-900'>
               <div className='flex items-center gap-2'>
                 <ArchiveBoxIcon className='size-6'/>
-                
                 <div className='text-xl font-semibold whitespace-nowrap'>Total packages: {packages.length}</div>
               </div>
               <div className='flex items-center gap-2'>

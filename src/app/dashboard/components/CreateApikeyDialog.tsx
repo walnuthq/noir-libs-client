@@ -22,7 +22,7 @@ interface CreateApikeyDialogButtonProps {
 
 export function CreateApikeyDialogButton({ onSuccess }: CreateApikeyDialogButtonProps) {
     const [label, setLabel] = useState("");
-    const [scopes, setScopes] = useState<string[]>(['publish']);
+    const [scopes, setScopes] = useState<string[]>(['PUBLISH']);
     const [expires, setExpires] = useState<string>("never");
     const [validity, setValidity] = useState<string>("");
     const [open, setOpen] = useState(false);
@@ -79,7 +79,7 @@ export function CreateApikeyDialogButton({ onSuccess }: CreateApikeyDialogButton
     };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={ open } onOpenChange={ setOpen }>
             <DialogTrigger asChild>
                 <Button className="bg-blue-900">
                     <PlusIcon className="w-4 h-4"/>
@@ -101,69 +101,70 @@ export function CreateApikeyDialogButton({ onSuccess }: CreateApikeyDialogButton
                         </label>
                         <Input
                             id="label"
-                            value={label}
-                            onChange={(e) => setLabel(e.target.value)}
+                            value={ label }
+                            onChange={ (e) => setLabel(e.target.value) }
                             className="w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
 
                     <div className="flex flex-col">
                         <span className="font-semibold ml-1 text-sm mb-1">Scopes</span>
-                        <div className="flex flex-col gap-2 mt-2">
+                        <div className="flex flex-col gap-2 mt-1">
                             <div className="flex items-center gap-2">
                                 <Checkbox
-                                    id="publish"
-                                    checked={scopes.includes("publish")}
-                                    onCheckedChange={() => toggleScope("publish")}
+                                    id="PUBLISH"
+                                    checked={ scopes.includes("PUBLISH") }
+                                    onCheckedChange={ () => toggleScope("PUBLISH") }
                                 />
-                                <Label htmlFor="publish">Publish</Label>
+                                <Label htmlFor="PUBLISH">Publish</Label>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Checkbox
-                                    id="yank"
-                                    checked={scopes.includes("yank")}
-                                    onCheckedChange={() => toggleScope("yank")}
+                                    id="YANK"
+                                    checked={ scopes.includes("YANK") }
+                                    onCheckedChange={ () => toggleScope("YANK") }
                                 />
-                                <Label htmlFor="yank">Yank</Label>
+                                <Label htmlFor="YANK">Yank</Label>
                             </div>
                         </div>
                     </div>
 
                     <div className="flex flex-col">
                         <span className="font-semibold ml-1 text-sm mb-1">Expires</span>
-                        <RadioGroup value={expires} onValueChange={setExpires}>
+                        <RadioGroup className="mt-1" value={ expires } onValueChange={ setExpires }>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="never" id="r1" />
+                                <RadioGroupItem value="never" id="r1"/>
                                 <Label htmlFor="r1">Never</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="7d" id="r2" />
+                                <RadioGroupItem value="7d" id="r2"/>
                                 <Label htmlFor="r2">7 days</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="365d" id="r3" />
+                                <RadioGroupItem value="365d" id="r3"/>
                                 <Label htmlFor="r3">365 days</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="custom" id="r4" />
+                                <RadioGroupItem value="custom" id="r4"/>
                                 <Label htmlFor="r4">Custom</Label>
                             </div>
                         </RadioGroup>
 
                         <div className="relative w-full mt-2">
                             <Input
-                                disabled={expires !== "custom"}
+                                disabled={ expires !== "custom" }
                                 id="validity"
-                                value={validity}
-                                onChange={(e) => {
+                                value={ validity }
+                                onChange={ (e) => {
                                     const inputValue = e.target.value;
                                     if (/^\d*$/.test(inputValue) && inputValue !== "0") {
                                         setValidity(inputValue);
                                     }
-                                }}
+                                } }
                                 className="w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500 pr-10"
                             />
-                            <span className="absolute inset-y-0 right-3 flex items-center text-gray-500 select-none pointer-events-none">
+                            <span
+                                className="absolute inset-y-0 right-3 flex items-center text-gray-500 select-none pointer-events-none">
                                 days
                             </span>
                         </div>
@@ -171,7 +172,8 @@ export function CreateApikeyDialogButton({ onSuccess }: CreateApikeyDialogButton
                 </div>
 
                 <DialogFooter>
-                    <Button className="bg-blue-900" type="submit" onClick={handleSubmit} disabled={scopes.length === 0}>
+                    <Button className="bg-blue-900" type="submit" onClick={ handleSubmit }
+                            disabled={ scopes.length === 0 }>
                         Create
                     </Button>
                 </DialogFooter>

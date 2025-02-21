@@ -60,9 +60,10 @@ export function UserPackagesList({ apiKeyListProps }: { apiKeyListProps: ApiKeyL
                                 { userPackage.versions.map((version) => (
                                     <div className="flex items-center gap-2">
                                         <div>
-                                            <Link href={ `/packages/${ userPackage.name }/${ version.version }` }>
+                                            <Link href={ `/packages/${ userPackage.name }/${ version.version }` } className="hover:underline">
                                                 • { version.version }
                                             </Link>
+                                            { version.isYanked && <span className="text-sm font-medium ml-1 px-1 py-1 bg-red-200 text-red-800 rounded-md">YANKED</span> }
                                         </div>
                                     </div>
                                 ))

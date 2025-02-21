@@ -61,9 +61,15 @@ export function PackageDetail({ data }: PackageDetailProps) {
     <>
       <div className="max-w-5xl mx-auto p-4 mt-8">
         <div className="mb-6">
-          <div className="flex items-baseline gap-2">
-            <h1 className="text-2xl font-semibold">{data.name} {data.packageVersion.version.version}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-semibold">
+              {data.name} {data.packageVersion.version.version}
+            </h1>
+              {data.packageVersion.version.isYanked && (
+                  <span className="text-sm font-medium px-2 py-1 bg-red-200 text-red-800 rounded-md">YANKED</span>
+              )}
           </div>
+
           <div className="mt-2">{data.packageVersion.description}</div>
         </div>
         <div className="border-b mb-6">
@@ -148,28 +154,29 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 </div>
               </div>
             </Card>
-            <Card className="p-4 mb-4">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                Installation
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-600 mb-2">Run the following command in your project directory</p>
-                  <div className=' bg-gray-100 p-2 rounded text-sm flex justify-between'>
-                    <code className="block">
-                      noir-libs add {data.name}@{data.packageVersion.version.version}
-                    </code>
-                    <button onClick={copyCommand}>
-                      {copied ? 
-                        <CheckIcon className='size-5 text-green-600'/> :
-                        <ClipboardDocumentIcon className='size-5 text-gray-700'/>
-                      }
-                    </button>
+            { !data.packageVersion.version.isYanked &&
+                <Card className="p-4 mb-4">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    Installation
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-2">Run the following command in your project directory</p>
+                      <div className=' bg-gray-100 p-2 rounded text-sm flex justify-between'>
+                        <code className="block">
+                          noir-libs add {data.name}@{data.packageVersion.version.version}
+                        </code>
+                        <button onClick={copyCommand}>
+                          {copied ?
+                            <CheckIcon className='size-5 text-green-600'/> :
+                            <ClipboardDocumentIcon className='size-5 text-gray-700'/>
+                          }
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                </div>
-              </div>
-            </Card>
+              </Card>
+            }
             <Card className="p-4  mb-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 Monthly downloads

@@ -11,7 +11,7 @@ export function GitHubIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 function EditorFooter() {
 
-  
+
   return (
     <div
       className={

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { PackageDetail } from './components/PackageDetail';
 import { FileQuestion } from 'lucide-react';
 import Footer from '@/components/Footer';
-import { PackageDto } from '@/types/PackageDto';
 import { PackageVersionDto } from '@/types/PackageVersionDto';
 import Header from '@/components/Header';
 

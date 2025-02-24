@@ -93,7 +93,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
           <div className="flex-grow">
             <div className="prose max-w-none">
               {activeTab === 'Readme' && (
-                  <Card className='w-full flex justify-between  hover:shadow-xl transition-all delay-0 cursor-pointer' style={{  padding: '20px' }}>
+                  <Card className='w-full flex justify-between transition-all delay-0' style={{  padding: '20px' }}>
                     <div className='flex items-center gap-4'>
                       <div className="markdown-content">
                             <ReactMarkdown>{data.packageVersion.readme}</ReactMarkdown>

@@ -58,7 +58,7 @@ export function UserApiKeyList({ apiKeyListProps }: { apiKeyListProps: ApiKeyLis
     }, []);
 
     return (
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col mb-10">
             <div className="flex flex-row justify-between mt-20">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2 ">Your API keys</h1>
                 <CreateApikeyDialogButton onSuccess={ setApiKeysAfterCreation }/>

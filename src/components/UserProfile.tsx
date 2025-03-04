@@ -11,10 +11,10 @@ export function UserProfile() {
     return (
         <>
             { profile === undefined ?
-                <Link href={ `/api/v1/auth/github` }
-                      className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
-                    <span>Sign up with Github</span>
+                <Link href={ `/api/v1/auth/github` } target="_blank"
+                      className='md:flex hidden gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
                     <GitHubIcon className='w-4 h-4'/>
+                    <span>Sign up with Github</span>
                 </Link> :
                 <Link href="/dashboard">
                     <div className="flex flex-row items-center gap-2 cursor-pointer">

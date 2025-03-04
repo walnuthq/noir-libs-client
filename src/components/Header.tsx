@@ -11,7 +11,7 @@ const Header = () => {
             <div className='text-2xl'>Noir Libs</div>
           </Link>
           <div className='flex items-center gap-4'>
-            <Link href={'https://t.me/walnuthq'} className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
+            <Link href={'https://t.me/walnuthq'} target="_blank" className='md:flex hidden  gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
             <span className="[&>svg]:h-4 [&>svg]:w-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

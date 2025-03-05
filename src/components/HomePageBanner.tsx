@@ -19,7 +19,7 @@ const HomePageBanner = () => {
                 Registry
             </h1>
             <div className="flex justify-center mt-10 md:mt-24 px-4 sm:px-0 ">
-                <div className="md:max-w-5xl px-4 mx-auto flex flex-col">
+                <div className="md:max-w-5xl px-4 md:pb-0 pb-6 mx-auto flex flex-col">
                     <div>
                         <p className="text-lg sm:text-xl text-white mb-4 text-center">
                             Install noir-libs by running the following command in your terminal

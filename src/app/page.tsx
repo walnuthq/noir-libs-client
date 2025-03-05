@@ -61,7 +61,7 @@ export default function Home() {
                 <Link href={`/packages/${pkg.name}/${pkg.versions[0].version}`} key={pkg.name} className='w-full'>
                   <Card  className='flex justify-between gap-5 hover:shadow-xl transition-all delay-0 cursor-pointer' style={{  margin: '10px', padding: '20px' }}>
                     <div>
-                      <div className="text-xl font-bold">{pkg.name} <span className='font-thin text-gray-600'>{pkg.versions[0].version}</span></div>
+                      <div className="text-xl font-bold">{pkg.name} <span className='font-medium text-gray-600'>{pkg.versions[0].version}</span></div>
                       <div className="mt-2">{pkg.latestPackageVersion.description}</div>
                       {pkg.latestPackageVersion.tags && <div className='flex mt-2 gap-2'>
                         <div className='py-1 px-2 bg-slate-100 rounded-lg'>{pkg.latestPackageVersion.tags}</div>

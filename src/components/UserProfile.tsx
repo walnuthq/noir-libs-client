@@ -12,7 +12,7 @@ export function UserProfile() {
         <>
             { profile === undefined ?
                 <Link href={ `/api/v1/auth/github` } target="_blank"
-                      className='md:flex hidden gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
+                      className='flex gap-2 items-center hover:text-blue-300 transition-all delay-75 cursor-pointer'>
                     <GitHubIcon className='w-4 h-4'/>
                     <span>Sign up with Github</span>
                 </Link> :

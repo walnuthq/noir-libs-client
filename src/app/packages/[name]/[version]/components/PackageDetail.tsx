@@ -93,7 +93,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
           <div className="flex-grow">
             <div className="prose max-w-none">
               {activeTab === 'Readme' && (
-                  <Card className='w-full flex justify-between transition-all delay-0' style={{  padding: '20px' }}>
+                  <Card className='w-full flex justify-between transition-all delay-0 mb-4' style={{  padding: '20px' }}>
                     <div className='flex items-center gap-4'>
                       <div className="markdown-content">
                             <ReactMarkdown>{data.packageVersion.readme}</ReactMarkdown>
@@ -106,7 +106,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 <>
                   {versions.map((version) => (
                     <Link href={`/packages/${data.name}/${version.version}`} key={`${data.name}-${version.version}`} className='w-full no-underline'>
-                      <Card className='w-full flex justify-between  hover:shadow-xl transition-all my-3 delay-0 cursor-pointer' style={{  padding: '20px' }}>
+                      <Card className='w-full flex justify-between  hover:shadow-xl transition-all mb-3 delay-0 cursor-pointer' style={{  padding: '20px' }}>
                         <div className='flex items-center gap-4'>
                           <div className=' bg-gray-300 p-2 rounded-full'>
                             <ArchiveBoxIcon className='size-7'/>
@@ -183,10 +183,28 @@ export function PackageDetail({ data }: PackageDetailProps) {
               </h3>
               <PackageDownloadsChart data={monthlyDownloads} />
             </Card>
+
             <Card className="p-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                Keywords
+                Other
               </h3>
+              {data.packageVersion.repository &&
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-600 mb-2">Github</p>
+                    <a href={data.packageVersion.repository} target="_blank" className="py-1  rounded-lg  transition-all">
+                      {data.packageVersion.repository}
+                    </a>
+                  </div>
+              }
+              {data.packageVersion.ownerUserName &&
+                  <div className="mb-4">
+                      <p className="text-sm text-gray-600 mb-2">Owner</p>
+                      <a href={`https://github.com/${data.packageVersion.ownerUserName}`} target="_blank" className="py-1  rounded-lg  transition-all">
+                        {`https://github.com/${data.packageVersion.ownerUserName}`}
+                      </a>
+                  </div>
+              }
+              <p className="text-sm text-gray-600 mb-2">Keywords</p>
               {data.packageVersion.tags && <div className="flex flex-wrap gap-2">
                 <div className='py-1 px-2 bg-slate-100 rounded-lg'>{data.packageVersion.tags}</div>
               </div> }

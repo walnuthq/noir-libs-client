@@ -62,9 +62,23 @@ export default function Faq() {
                         an API key in your <Link href="/dashboard" className="underline">Dashboard</Link>.
                         API key for publishing requires <code className="p-1 bg-gray-200">PUBLISH</code> scope.
                         Having API key, ensure your package is a valid Noir library and contains all required sections in <code className="p-1 bg-gray-200">Nargo.toml</code> file.
+                        Here is the example of a Nargo.toml file content containing package sections used for publishing:
+                        <pre className="p-3 bg-gray-200 rounded-md overflow-auto mt-2 mb-2">
+            <code className="whitespace-pre">
+{`[package]
+name = "my_cool_package"
+description = "A cool package for Noir"
+type = "lib"
+version = "0.1.0"
+repository = "https://github.com/my-github-username/my_cool_package"
+keywords = ["Noir", "my_cool_package"]
+`}
+            </code>
+        </pre>
                         Open a terminal on your Noir project and export <code className="p-1 bg-gray-200">NOIR_LIBS_API_KEY</code> environment variable
                         (e.g. <code className="p-1 bg-gray-200">export NOIR_LIBS_API_KEY=&lt;your API key&gt;</code>).
-                        Run <code className="p-1 bg-gray-200">noir-libs publish</code>.
+                        Run <code className="p-1 bg-gray-200">noir-libs package</code> for creating a distributable tarball.
+                        Then run <code className="p-1 bg-gray-200">noir-libs publish</code>.
                         The package will be published and become available for other users to download.
                     </AccordionContent>
                 </AccordionItem>

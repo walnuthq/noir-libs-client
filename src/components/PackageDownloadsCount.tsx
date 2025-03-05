@@ -1,22 +1,31 @@
 
 import { useEffect, useState } from "react";
-import { fetchPackageDownloadsCount } from "@/app/api/getDownloadsCount";
+import { fetchAllPackageDownloadsCount, fetchPackageDownloadsCount } from "@/app/api/getDownloadsCount";
 
 const PackageDownloadsCount = ({
   pkg_name,
   pkg_version
 }: {
   pkg_name: string;
-  pkg_version: string;
+  // if provided, will count version downloads, otherwise all package downloads
+  pkg_version?: string;
 }) => {
-  const [downloadsCount, setDownloadsCount] = useState();
+  const [downloadsCount, setDownloadsCount] = useState<number>(0);
 
   useEffect(() => {
     const getDownloadsCount = async () => {
-
       try {
-        const data = await fetchPackageDownloadsCount(pkg_name, pkg_version);
-        setDownloadsCount(data.downloads.length);
+        if (pkg_version) {
+          const data = await fetchPackageDownloadsCount(pkg_name, pkg_version);
+          if (data) {
+            setDownloadsCount(data.downloadDates.length);
+          }
+        } else {
+          const count = await fetchAllPackageDownloadsCount(pkg_name);
+          if (count) {
+            setDownloadsCount(count);
+          }
+        }
       } catch (err) {
         console.error('Failed to fetch downloads:', err);
       }

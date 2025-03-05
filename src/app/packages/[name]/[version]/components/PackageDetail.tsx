@@ -2,35 +2,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PackageData } from '@/types/package';
 import { Card } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
 import PackageDownloadsChart from './PackageDownloadsChart';
 import Link from 'next/link';
-import { Car } from 'lucide-react';
-import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
+import { ArchiveBoxIcon, ArrowDownOnSquareIcon } from '@heroicons/react/20/solid';
 import { formatDistanceToNow } from 'date-fns';
 import { fetchPackageDownloadsCount } from '@/app/api/getDownloadsCount';
 import PackageDownloadsCount from '@/components/PackageDownloadsCount';
-import {ArchiveBoxIcon} from '@heroicons/react/20/solid';
 // import {ClipboardDocumentIcon} from '@heroicons/react/20/solid';
-import { DownloadsData } from '@/types/downloads';
-import { ClipboardDocumentIcon, CheckIcon } from '@heroicons/react/24/outline';
-import Header from './Header';
+import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
+import { VersionDto } from '@/types/VersionDto';
+import { PackageVersionDto } from '@/types/PackageVersionDto';
+import { DownloadsDto } from '@/types/DownloadsDto';
 
 interface PackageDetailProps {
-  data: PackageData;
+  data: { name: string, packageVersion: PackageVersionDto };
 }
 
 export function PackageDetail({ data }: PackageDetailProps) {
   const [activeTab, setActiveTab] = useState('Readme');
-  const [monthlyDownloads, setMonthlyDownloads] = useState<DownloadsData>();
-  const [versionsArray, setVersionsArray] = useState([]);
+  const [monthlyDownloads, setMonthlyDownloads] = useState<DownloadsDto>();
+  const [versions, setVersions] = useState<VersionDto[]>([]);
   const tabs = ['Readme', 'Versions'];
   const [copied, setCopied] = useState(false);
 
   const copyCommand = () => {
-    navigator.clipboard.writeText(`noir-libs add ${data.name}@${data.version}`);
+    navigator.clipboard.writeText(`noir-libs add ${data.name}@${data.packageVersion.version}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -38,8 +36,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
     const getDownloadsCount = async () => {
 
       try {
-        const resp = await fetchPackageDownloadsCount(data.name, data.version);
-        console.log(resp);
+        const resp = await fetchPackageDownloadsCount(data.name, data.packageVersion.version.version);
         setMonthlyDownloads(resp);
       } catch (err) {
         console.error('Failed to fetch downloads:', err);
@@ -47,14 +44,13 @@ export function PackageDetail({ data }: PackageDetailProps) {
     };
     const getVersionsArray = async () => {
       try {
-        const response = await fetch(`/api/v1/packages`);
+        const response = await fetch(`/api/v1/packages/${data.name}/versions/all`);
         if (response.status === 200) {
-          const packageData = await response.json();
-          console.log(packageData.filter((item: any) => item.name === data.name)[0].versions);
-          setVersionsArray(packageData.filter((item: any) => item.name === data.name)[0].versions);
+          const versionsResp: VersionDto[] = await response.json();
+          setVersions(versionsResp);
         }
       } catch (err) {
-        console.log('no packages ', err);
+        console.log(err);
       }
     }
     getVersionsArray();
@@ -63,12 +59,18 @@ export function PackageDetail({ data }: PackageDetailProps) {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto p-4">
+      <div className="max-w-5xl mx-auto p-4 mt-8">
         <div className="mb-6">
-          <div className="flex items-baseline gap-2">
-            <h1 className="text-2xl font-semibold">{data.name}</h1>
-            <span className='text-gray-600 text-xl'>{data.version}</span>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-semibold">
+              {data.name} {data.packageVersion.version.version}
+            </h1>
+              {data.packageVersion.version.isYanked && (
+                  <span className="text-sm font-medium px-2 py-1 bg-red-200 text-red-800 rounded-md">YANKED</span>
+              )}
           </div>
+
+          <div className="mt-2">{data.packageVersion.description}</div>
         </div>
         <div className="border-b mb-6">
           <div className="flex gap-4">
@@ -82,7 +84,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                 }`}
                 onClick={() => setActiveTab(tab)}
               >
-                {tab}
+                {tab === 'Versions' ? `${versions.length} Versions` : 'Readme'}
               </button>
             ))}
           </div>
@@ -91,24 +93,28 @@ export function PackageDetail({ data }: PackageDetailProps) {
           <div className="flex-grow">
             <div className="prose max-w-none">
               {activeTab === 'Readme' && (
-                <div className="markdown-content">
-                  <ReactMarkdown>{data.readme}</ReactMarkdown>
-                </div>
+                  <Card className='w-full flex justify-between transition-all delay-0' style={{  padding: '20px' }}>
+                    <div className='flex items-center gap-4'>
+                      <div className="markdown-content">
+                            <ReactMarkdown>{data.packageVersion.readme}</ReactMarkdown>
+                      </div>
+                    </div>
+                  </Card>
                 
               )}
               {activeTab === 'Versions' && (
                 <>
-                  {versionsArray.map((item :any) => (
-                    <Link href={`/packages/${data.name}/${data.version}`} key={data.name} className='w-full no-underline'>
+                  {versions.map((version) => (
+                    <Link href={`/packages/${data.name}/${version.version}`} key={`${data.name}-${version.version}`} className='w-full no-underline'>
                       <Card className='w-full flex justify-between  hover:shadow-xl transition-all my-3 delay-0 cursor-pointer' style={{  padding: '20px' }}>
                         <div className='flex items-center gap-4'>
                           <div className=' bg-gray-300 p-2 rounded-full'>
                             <ArchiveBoxIcon className='size-7'/>
                           </div>
                           <div>
-                            <div className="text-gray-600 text-xs">{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</div>
-                            <div className='text-lg font-semibold whitespace-nowrap'>{item.version}</div>
-                            <div className="text-gray-600 text-xs">Size: <span className='text-base text-black'>{item.sizeKb} KB</span></div>
+                            <div className="text-gray-600 text-xs">{formatDistanceToNow(new Date(version.createdAt), { addSuffix: true })}</div>
+                            <div className='text-lg font-semibold whitespace-nowrap'>{version.version}</div>
+                            <div className="text-gray-600 text-xs">Size: <span className='text-base text-black'>{version.sizeKb} KB</span></div>
                           </div>
                         </div>
                         <div>
@@ -117,7 +123,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
                             <div className='text-lg font-semibold whitespace-nowrap'>Downloads</div>
                           </div>
                           <div className='text-right mt-2'>
-                            All time <span className='font-bold'><PackageDownloadsCount pkg_name={data.name} pkg_version={data.version}/></span>
+                            All time <span className='font-bold'><PackageDownloadsCount pkg_name={data.name} pkg_version={version.version}/></span>
                           </div>
                         </div>
                       </Card>
@@ -135,41 +141,42 @@ export function PackageDetail({ data }: PackageDetailProps) {
               <div className="space-y-2">
                 <div>
                   <span className="text-gray-600">Version</span>{' '}
-                  <span>{data.version}</span>
+                  <span>{data.packageVersion.version.version}</span>
                 </div>
                 <div>
                   <span className="text-gray-600">Uploaded</span>{' '}
-                  <span>{formatDistanceToNow(new Date(data.created_at), { addSuffix: true })}</span>
+                  <span>{formatDistanceToNow(new Date(data.packageVersion.version.createdAt), { addSuffix: true })}</span>
                 </div>
                 <div>
                   <span className="text-gray-600">Size</span>
                   {' '}
-                  <span>{data.size_kb} kb</span>
+                  <span>{data.packageVersion.version.sizeKb} KB</span>
                 </div>
               </div>
             </Card>
-            <Card className="p-4 mb-4">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                Installation
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-600 mb-2">Run the following command in your project directory</p>
-                  <div className=' bg-gray-100 p-2 rounded text-sm flex justify-between'>
-                    <code className="block">
-                      noir-libs add {data.name}@{data.version}
-                    </code>
-                    <button onClick={copyCommand}>
-                      {copied ? 
-                        <CheckIcon className='size-5 text-green-600'/> :
-                        <ClipboardDocumentIcon className='size-5 text-gray-700'/>
-                      }
-                    </button>
+            { !data.packageVersion.version.isYanked &&
+                <Card className="p-4 mb-4">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    Installation
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-2">Run the following command in your project directory</p>
+                      <div className=' bg-gray-100 p-2 rounded text-sm flex justify-between'>
+                        <code className="block">
+                          noir-libs add {data.name}@{data.packageVersion.version.version}
+                        </code>
+                        <button onClick={copyCommand}>
+                          {copied ?
+                            <CheckIcon className='size-5 text-green-600'/> :
+                            <ClipboardDocumentIcon className='size-5 text-gray-700'/>
+                          }
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                </div>
-              </div>
-            </Card>
+              </Card>
+            }
             <Card className="p-4  mb-4">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 Monthly downloads
@@ -180,9 +187,9 @@ export function PackageDetail({ data }: PackageDetailProps) {
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 Keywords
               </h3>
-              <div className="flex flex-wrap gap-2">
-                {data.tags}
-              </div>
+              {data.packageVersion.tags && <div className="flex flex-wrap gap-2">
+                <div className='py-1 px-2 bg-slate-100 rounded-lg'>{data.packageVersion.tags}</div>
+              </div> }
             </Card>
           </div>
         </div>

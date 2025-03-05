@@ -10,6 +10,7 @@ import Footer from '@/components/Footer';
 import { PackageDto } from '@/types/PackageDto';
 import HomePageBanner from '@/components/HomePageBanner';
 import { fetchAllPackagesDownloadsCount } from '@/app/api/getDownloadsCount';
+import Faq from '@/components/Faq';
 
 export default function Home() {
   const [packages, setPackages] = useState<PackageDto[]>([]);
@@ -79,6 +80,10 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+            <div className="w-full flex flex-col justify-center items-center mb-24">
+              <Faq/>
+            </div>
+
           </div>
         <Footer/>
         </main>

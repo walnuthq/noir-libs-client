@@ -6,3 +6,4 @@ pages_build_output_dir = ".vercel/output/static"
 #[env.production.vars]
 [vars]
 NEXT_PUBLIC_API_URL = "https://api.noir-libs.org"
+NEXT_PUBLIC_CLIENT_URL = "https://noir-libs.org"

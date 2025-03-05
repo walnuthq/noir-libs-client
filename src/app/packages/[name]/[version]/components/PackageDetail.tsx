@@ -28,7 +28,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
   const [copied, setCopied] = useState(false);
 
   const copyCommand = () => {
-    navigator.clipboard.writeText(`noir-libs add ${data.name}@${data.packageVersion.version}`);
+    navigator.clipboard.writeText(`noir-libs add ${data.name}@${data.packageVersion.version.version}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

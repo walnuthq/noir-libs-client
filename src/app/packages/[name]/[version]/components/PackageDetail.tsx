@@ -15,6 +15,8 @@ import { CheckIcon, ClipboardDocumentIcon } from '@heroicons/react/24/outline';
 import { VersionDto } from '@/types/VersionDto';
 import { PackageVersionDto } from '@/types/PackageVersionDto';
 import { DownloadsDto } from '@/types/DownloadsDto';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 
 interface PackageDetailProps {
   data: { name: string, packageVersion: PackageVersionDto };
@@ -93,13 +95,18 @@ export function PackageDetail({ data }: PackageDetailProps) {
           <div className="flex-grow">
             <div className="prose max-w-none">
               {activeTab === 'Readme' && (
-                  <Card className='w-full flex justify-between transition-all delay-0 mb-4' style={{  padding: '20px' }}>
-                    <div className='flex items-center gap-4'>
-                      <div className="markdown-content">
-                            <ReactMarkdown>{data.packageVersion.readme}</ReactMarkdown>
-                      </div>
+                <Card className='w-full mb-4'>
+                  <div className='p-5 overflow-x-auto'>
+                    <div className="markdown-content w-full max-w-full">
+                      <ReactMarkdown 
+                        className='break-words w-full ' 
+                        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                      >
+                        {data.packageVersion.readme}
+                      </ReactMarkdown>
                     </div>
-                  </Card>
+                  </div>
+                </Card>
                 
               )}
               {activeTab === 'Versions' && (
@@ -191,7 +198,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
               {data.packageVersion.repository &&
                   <div className="mb-4">
                     <p className="text-sm text-gray-600 mb-2">Github</p>
-                    <a href={data.packageVersion.repository} target="_blank" className="py-1  rounded-lg  transition-all">
+                    <a href={data.packageVersion.repository} target="_blank" className="py-1  rounded-lg break-words  transition-all">
                       {data.packageVersion.repository}
                     </a>
                   </div>
@@ -199,7 +206,7 @@ export function PackageDetail({ data }: PackageDetailProps) {
               {data.packageVersion.ownerUserName &&
                   <div className="mb-4">
                       <p className="text-sm text-gray-600 mb-2">Owner</p>
-                      <a href={`https://github.com/${data.packageVersion.ownerUserName}`} target="_blank" className="py-1  rounded-lg  transition-all">
+                      <a href={`https://github.com/${data.packageVersion.ownerUserName}`} target="_blank" className="py-1 break-words  rounded-lg  transition-all">
                         {`https://github.com/${data.packageVersion.ownerUserName}`}
                       </a>
                   </div>
